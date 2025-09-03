@@ -1,28 +1,28 @@
 const fs = require('fs');
 const path = require('path');
 
-// Папка с изображениями (текущая директория)
+// your folder
 const IMAGES_DIR = './images';
 
-// Проверяем существование папки images
+// check is dir exist
 if (!fs.existsSync(IMAGES_DIR)) {
     console.log('❌ Папка images не найдена!');
     console.log('📁 Создайте папку images и положите туда картинки');
     process.exit(1);
 }
 
-// Читаем файлы из папки images
+// read file 
 const imageFiles = fs.readdirSync(IMAGES_DIR);
 
 if (imageFiles.length === 0) {
-    console.log('❌ В папке images нет файлов!');
-    console.log('📁 Положите картинки в папку images');
+    console.log('В папке images нихуя нет!');
+    console.log('не ленись или отьебись');
     process.exit(1);
 }
 
-console.log(`📁 Найдено файлов: ${imageFiles.length}`);
+console.log(`📁 изображение : ${imageFiles.length}`);
 
-// База знаний для автоматического определения данных
+// character database on this it will generate the new characters
 const CHARACTER_DATABASE = {
     'amurika': { name: 'Капитан Америка', desc: 'Капитан Бургера', price: 5000 },
     'tonysrark': { name: 'Железный Человек', desc: 'Гений, миллиардер, плейбой, филантроп', price: 6000 },
@@ -40,7 +40,7 @@ const CHARACTER_DATABASE = {
 
 const charactersData = [];
 
-// Обрабатываем каждый файл
+// reading all files
 imageFiles.forEach(imageFile => {
     const filename = path.parse(imageFile).name.toLowerCase();
     console.log(`🔍 Обрабатываю: ${imageFile}`);
@@ -55,7 +55,7 @@ imageFiles.forEach(imageFile => {
         }
     }
     
-    // Если не нашли в базе, генерируем автоматически
+    // if there is generate
     if (!characterData) {
         const name = generateNameFromFilename(filename);
         characterData = {
@@ -76,7 +76,7 @@ imageFiles.forEach(imageFile => {
     });
 });
 
-// Функции помощники
+// plus function
 function generateNameFromFilename(filename) {
     return filename
         .replace(/[^a-zA-Zа-яА-Я]/g, ' ')
@@ -90,7 +90,7 @@ function generateRandomPrice(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Сохраняем результат в текущую директорию
+// saving result in the same directory
 const output = `const charactersData = ${JSON.stringify(charactersData, null, 2)};\n\nexport default charactersData;`;
 fs.writeFileSync('./charactersData.js', output);
 
